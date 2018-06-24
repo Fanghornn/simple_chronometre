@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, Text, View, Animated } from 'react-native';
+import { StyleSheet, Text, View, Animated, ScrollView } from 'react-native';
 import Sound from 'react-native-sound';
 
 import Counter from './counter';
-
+import Colors from './ui/colors';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -61,14 +61,16 @@ export default class App extends React.Component {
     const backgroundStyle = backgroundAnim.interpolate({
       inputRange: [0, 1],
       // outputRange: ['#11ff11', '#000000']  // 0 : 150, 0.5 : 75, 1 : 0
-      outputRange: ['#FF9100', '#FF6D00']
+      outputRange: [Colors.primary.backgroundColor, Colors.darkPrimary.backgroundColor]
     });
 
     const style = Object.assign(styles, { backgroundColor: backgroundStyle }, {});
 
     return (
       <Animated.View style={style}>
-        <Counter onTimerSound={this.playSound} />
+        <ScrollView>
+          <Counter onTimerSound={this.playSound} />
+        </ScrollView>
       </Animated.View>
     );
   }

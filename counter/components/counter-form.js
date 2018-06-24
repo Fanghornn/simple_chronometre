@@ -9,11 +9,20 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-const CounterControlsStyles = StyleSheet.create({
-  inputLabel: {
-    fontSize: 16,
-  },
+import Colors from '../../ui/colors';
 
+const CounterControlsStyles = StyleSheet.create({
+  container: {
+    
+  },
+  inputLabel: {
+    ...Colors.text,
+    fontSize: 24,
+  },
+  inputText: {
+    ...Colors.text,
+    fontSize: 24,
+  },
   inputLine: {
     margin: 12,
   },
@@ -56,12 +65,16 @@ export default class CounterForm extends React.Component {
     const { inputStates, inputChangeEvents } = this.state;
 
     return (
-      <ScrollView>
+      <View style={CounterControlsStyles.container}>
         <View style={CounterControlsStyles.inputLine}>
           <Text style={CounterControlsStyles.inputLabel}>
             { 'Work time :' }
           </Text>
           <TextInput
+            clearTextOnFocus={true}
+            underlineColorAndroid={Colors.text.color}
+            keyboardType='numeric'
+            style={CounterControlsStyles.inputText}
             value={inputStates.work}
             onBlur={onTimerConfigChange.work}
             onChangeText={inputChangeEvents.work}
@@ -73,6 +86,10 @@ export default class CounterForm extends React.Component {
             { 'Rest time :' }
           </Text>
           <TextInput
+            clearTextOnFocus={true}
+            underlineColorAndroid={Colors.text.color}
+            keyboardType='numeric'
+            style={CounterControlsStyles.inputText}
             value={inputStates.rest}
             onBlur={onTimerConfigChange.rest}
             onChangeText={inputChangeEvents.rest}
@@ -84,12 +101,16 @@ export default class CounterForm extends React.Component {
             { 'Cycles :' }
           </Text>
           <TextInput
+            clearTextOnFocus={true}
+            underlineColorAndroid={Colors.text.color}
+            keyboardType='numeric'
+            style={CounterControlsStyles.inputText}
             value={inputStates.cycles}
             onBlur={onTimerConfigChange.cycles}
             onChangeText={inputChangeEvents.cycles}
           />
         </View>
-      </ScrollView>
+      </View>
     );
   }
 }

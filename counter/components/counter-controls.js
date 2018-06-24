@@ -9,10 +9,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import Colors from '../../ui/colors';
+
 const CounterControlsStyles = StyleSheet.create({
   button: {
+    backgroundColor: Colors.text.color,
     alignItems: 'center',
-    backgroundColor: '#DDDDDD',
     padding: 10,
     margin: 16,
   },
@@ -47,7 +49,7 @@ export default class CounterControls extends React.Component {
     }
 
     return (
-      <ScrollView>
+      <View>
       {
         !timerStarted
         ? (
@@ -77,7 +79,7 @@ export default class CounterControls extends React.Component {
       >
         <Text>Reset config</Text>
       </TouchableOpacity>
-    </ScrollView>
+    </View>
     );
   }
 }

@@ -18,6 +18,7 @@ const CounterStyles = StyleSheet.create({
   window: {
     flex: 1,
     justifyContent: 'center',
+    marginTop: 64,
   },
 });
 
@@ -87,23 +88,17 @@ export default class Counter extends React.Component {
   }
 
   createTimerChange(type) {
-    return () =>  {
-      const { timerConfig, inputStates } = this.state;
-
-      const value = inputStates[type];
+    return (value) =>  {
+      const { timerConfig } = this.state;
       const normalizedValue = Number(value)
-        ? value
-        : '0';
+        ? Number(value)
+        : 0;
   
       this.setState({
         ...this.state,
         timerConfig: {
           ...timerConfig,
           [type]: Number(normalizedValue),
-        },
-        inputStates: {
-          ...inputStates,
-          [type]: normalizedValue,
         },
       });
     }
@@ -169,6 +164,19 @@ export default class Counter extends React.Component {
     });
   }
 
+  getPercentageLeft() {
+    const { timerState, timerConfig } = this.state;
+    const type = timerState.type;
+
+    if (timerState.on) {
+      return Math.round(
+        100 * timerState.time / Number(timerConfig[type])
+      );
+    }
+
+    return 0;
+  }
+
   render() {
     const {
       timerState: { time, type, on, started },
@@ -176,11 +184,12 @@ export default class Counter extends React.Component {
     } = this.state;
 
     return (
-      <ScrollView contentContainerStyle={CounterStyles.window}>
+      <View style={CounterStyles.window}>
 
         <TimerDisplay
           time={time}
           type={type}
+          percent={this.getPercentageLeft()}
         />
 
         <CounterForm
@@ -195,7 +204,7 @@ export default class Counter extends React.Component {
           resetChrono={this.resetChrono}
           resetConfig={this.resetConfig}
         />
-      </ScrollView>
+      </View>
     );
   }
 }
