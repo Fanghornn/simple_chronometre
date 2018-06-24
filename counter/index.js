@@ -10,31 +10,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import CounterControls from './components/counter-controls';
+import CounterForm from './components/counter-form';
+import TimerDisplay from './components/timer-display';
+
 const CounterStyles = StyleSheet.create({
   window: {
     flex: 1,
     justifyContent: 'center',
-  },
-
-  time: {
-    textAlign: 'center',
-    fontSize: 32,
-    fontWeight: 'bold',
-  },
-
-  inputLabel: {
-    fontSize: 16,
-  },
-
-  inputLine: {
-    margin: 12,
-  },
-
-  button: {
-    alignItems: 'center',
-    backgroundColor: '#DDDDDD',
-    padding: 10,
-    margin: 16,
   },
 });
 
@@ -42,16 +25,10 @@ export default class Counter extends React.Component {
   constructor(props) {
     super(props);
 
-    const inputStates = {
-      rest: '',
-      work: '',
-      cycles: '',
-    };
-
     this.state = {
       timerConfig: {
         rest: 1,
-        work: 1,
+        work: 3,
         cycles: 0,
         sound: 'default',
       },
@@ -61,19 +38,11 @@ export default class Counter extends React.Component {
         started: false,
         on: false,
       },
-      timerEvents: {
-        change: {
-          work: this.createTimerChange('work'),
-          rest: this.createTimerChange('rest'),
-          cycles: this.createTimerChange('cycles'),
-        },
-        blur: {
-          work: this.createTimerBlur('work'),
-          rest: this.createTimerBlur('rest'),
-          cycles: this.createTimerBlur('cycles'),
-        },
+      onTimerConfigChange: {
+        work: this.createTimerChange('work'),
+        rest: this.createTimerChange('rest'),
+        cycles: this.createTimerChange('cycles'),
       },
-      inputStates,
     };
   }
 
@@ -118,20 +87,6 @@ export default class Counter extends React.Component {
   }
 
   createTimerChange(type) {
-    return (value) => {
-      const { inputStates } = this.state;
-
-      this.setState({
-        ...this.state,
-        inputStates: {
-          ...inputStates,
-          [type]: value,
-        },
-      });
-    }
-  }
-
-  createTimerBlur(type) {
     return () =>  {
       const { timerConfig, inputStates } = this.state;
 
@@ -152,39 +107,6 @@ export default class Counter extends React.Component {
         },
       });
     }
-  }
-
-  onWorkBlur = () => {
-    const { timerConfig, inputStates } = this.state;
-
-    const value = inputStates.work;
-    const normalizedValue = Number(value)
-      ? value
-      : '0';
-
-    this.setState({
-      ...this.state,
-      timerConfig: {
-        ...timerConfig,
-        work: Number(normalizedValue),
-      },
-      inputStates: {
-        ...inputStates,
-        work: normalizedValue,
-      },
-    });
-  }
-
-  onWorkChange = (value) => {
-    const { inputStates } = this.state;
-
-    this.setState({
-      ...this.state,
-      inputStates: {
-        ...inputStates,
-        work: value,
-      },
-    });
   }
 
   go = () => {
@@ -249,108 +171,30 @@ export default class Counter extends React.Component {
 
   render() {
     const {
-      timerState: { time, type },
-      inputStates,
-      timerState,
-      timerEvents: {
-       change,
-       blur,
-      }
+      timerState: { time, type, on, started },
+      onTimerConfigChange,
     } = this.state;
 
-    const timerStateLabel = type === 'rest'
-      ? 'Repos'
-      : 'Go'
-
-    let toggleButton = null;
-
-    if (timerState.started) {
-      toggleButton = (
-        <TouchableOpacity
-          style={CounterStyles.button}
-          onPress={this.togglePause}
-        >
-          <Text>{timerState.on ? 'Pause' : 'Reprendre'}</Text>
-        </TouchableOpacity>
-      );
-    }
     return (
       <ScrollView contentContainerStyle={CounterStyles.window}>
-        <View>
-          <Text style={CounterStyles.time}>{ time }</Text>
-        </View>
-        <View>
 
-        <View>
-          <Text style={CounterStyles.time}>
-            {type ? `${timerStateLabel} !!` : 'En attente' }
-          </Text>
-        </View>
+        <TimerDisplay
+          time={time}
+          type={type}
+        />
 
-          <View style={CounterStyles.inputLine}>
-            <Text style={CounterStyles.inputLabel}>
-              { 'Work time :' }
-            </Text>
-            <TextInput
-              value={inputStates.work}
-              onBlur={blur.work}
-              onChangeText={change.work}
-            />
-          </View>
+        <CounterForm
+          onTimerConfigChange={onTimerConfigChange}
+        />
 
-          <View style={CounterStyles.inputLine}>
-            <Text style={CounterStyles.inputLabel}>
-              { 'Rest time :' }
-            </Text>
-            <TextInput
-              value={inputStates.rest}
-              onBlur={blur.rest}
-              onChangeText={change.rest}
-            />
-          </View>
-
-          <View style={CounterStyles.inputLine}>
-            <Text style={CounterStyles.inputLabel}>
-              { 'Cycles :' }
-            </Text>
-            <TextInput
-              value={inputStates.cycles}
-              onBlur={blur.cycles}
-              onChangeText={change.cycles}
-            />
-          </View>
-        </View>
-        <View>
-          {
-            !timerState.started
-            ? (
-              <TouchableOpacity
-                style={CounterStyles.button}
-                onPress={this.go}
-                >
-                <Text>Go</Text>
-                </TouchableOpacity>
-            )
-            : null  
-
-          }
-
-          { toggleButton }
-          
-          <TouchableOpacity
-            style={CounterStyles.button}
-            onPress={this.resetChrono}
-          >
-            <Text>Reset Chrono</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={CounterStyles.button}
-            onPress={this.resetConfig}
-          >
-            <Text>Reset config</Text>
-          </TouchableOpacity>
-        </View>
+        <CounterControls
+          timerStarted={started}
+          chronoActive={on}
+          togglePause={this.togglePause}
+          go={this.go}
+          resetChrono={this.resetChrono}
+          resetConfig={this.resetConfig}
+        />
       </ScrollView>
     );
   }
