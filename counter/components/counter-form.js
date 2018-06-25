@@ -76,7 +76,9 @@ export default class CounterForm extends React.Component {
             keyboardType='numeric'
             style={CounterControlsStyles.inputText}
             value={inputStates.work}
-            onBlur={onTimerConfigChange.work}
+            onBlur={() => {
+              onTimerConfigChange.work(inputStates.work);
+            }}
             onChangeText={inputChangeEvents.work}
           />
         </View>
@@ -91,7 +93,9 @@ export default class CounterForm extends React.Component {
             keyboardType='numeric'
             style={CounterControlsStyles.inputText}
             value={inputStates.rest}
-            onBlur={onTimerConfigChange.rest}
+            onBlur={() => {
+              onTimerConfigChange.rest(inputStates.rest);
+            }}
             onChangeText={inputChangeEvents.rest}
           />
         </View>
@@ -106,7 +110,9 @@ export default class CounterForm extends React.Component {
             keyboardType='numeric'
             style={CounterControlsStyles.inputText}
             value={inputStates.cycles}
-            onBlur={onTimerConfigChange.cycles}
+            onBlur={() => {
+              onTimerConfigChange.cycles(inputStates.cycles);
+            }}
             onChangeText={inputChangeEvents.cycles}
           />
         </View>
