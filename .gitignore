@@ -66,19 +66,18 @@ buck-out
 .idea
 .gradle
 local.properties
-*.iml
-/android/
+android/keystores/debug.keystore
+android/.gradletasknamecache
+android/adyencse-*
+android/captures
+android/app/app.iml
+android/app/my-release-key.keystore
 
 # Node
 node_modules
 *.log
 .nvm
 /bots/node_modules/
-
-# TODO: Check in yarn.lock in open source. Right now we need to keep it out
-# from the GitHub repo as importing it might conflict with internal workspaces
-yarn.lock
-package-lock.json
 
 # OS X
 .DS_Store

@@ -9,22 +9,19 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import Colors from '../../ui/colors';
+import { FACES, SCALES, COLORS } from '../../ui';
+import { DEFAULT_TIMER_CONFIG } from '../constants';
 
 const CounterControlsStyles = StyleSheet.create({
-  container: {
-    
-  },
+  container: {},
   inputLabel: {
-    ...Colors.text,
-    fontSize: 24,
+    ...FACES.INPUT_LABEL,
   },
   inputText: {
-    ...Colors.text,
-    fontSize: 24,
+    ...FACES.INPUT_TEXT,
   },
   inputLine: {
-    margin: 12,
+    margin: SCALES._1,
   },
 });
 
@@ -32,11 +29,15 @@ export default class CounterForm extends React.Component {
   constructor(props) {
     super(props);
 
+    const configAsString = {
+      work: DEFAULT_TIMER_CONFIG.work.toString(),
+      rest: DEFAULT_TIMER_CONFIG.rest.toString(),
+      cycles: DEFAULT_TIMER_CONFIG.cycles.toString(),
+    }
+
     this.state = {
       inputStates: {
-        rest: '1',
-        work: '3',
-        cycles: '',
+        ...configAsString,
       },
       inputChangeEvents: {
         work: this.createTimerChange('work'),
@@ -68,11 +69,11 @@ export default class CounterForm extends React.Component {
       <View style={CounterControlsStyles.container}>
         <View style={CounterControlsStyles.inputLine}>
           <Text style={CounterControlsStyles.inputLabel}>
-            { 'Work time :' }
+            { 'Temps exercice:' }
           </Text>
           <TextInput
             clearTextOnFocus={true}
-            underlineColorAndroid={Colors.text.color}
+            underlineColorAndroid={COLORS.TEXTS}
             keyboardType='numeric'
             style={CounterControlsStyles.inputText}
             value={inputStates.work}
@@ -85,11 +86,11 @@ export default class CounterForm extends React.Component {
     
         <View style={CounterControlsStyles.inputLine}>
           <Text style={CounterControlsStyles.inputLabel}>
-            { 'Rest time :' }
+            { 'Temps repos :' }
           </Text>
           <TextInput
             clearTextOnFocus={true}
-            underlineColorAndroid={Colors.text.color}
+            underlineColorAndroid={COLORS.TEXTS}
             keyboardType='numeric'
             style={CounterControlsStyles.inputText}
             value={inputStates.rest}
@@ -102,11 +103,11 @@ export default class CounterForm extends React.Component {
     
         <View style={CounterControlsStyles.inputLine}>
           <Text style={CounterControlsStyles.inputLabel}>
-            { 'Cycles :' }
+            { 'Nombre de cycles :' }
           </Text>
           <TextInput
             clearTextOnFocus={true}
-            underlineColorAndroid={Colors.text.color}
+            underlineColorAndroid={COLORS.TEXTS}
             keyboardType='numeric'
             style={CounterControlsStyles.inputText}
             value={inputStates.cycles}

@@ -10,26 +10,22 @@ import {
 } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
-import Colors from '../../ui/colors';
+import { FACES, SCALES, COLORS } from '../../ui';
 
 const TimerStyles = StyleSheet.create({
   container: {
   },
   time: {
     textAlign: 'center',
-    fontSize: 32,
-    fontWeight: 'bold',
-    ...Colors.text,
+    ...FACES.BIG_TEXT
   },
   status: {
-    fontSize: 32,
+    ...FACES.BIG_TEXT,
     textAlign: 'center',
-    fontWeight: 'bold',
-    ...Colors.text,
   },
   circleView: {
     alignSelf: 'center',
-    marginBottom: 16,
+    marginBottom: SCALES._2,
   }
 });
 
@@ -38,8 +34,8 @@ export default class TimerDisplay extends React.Component {
     const { type, time, percent } = this.props;
 
     const timerStateLabel = type === 'rest'
-      ? 'Repos'
-      : 'Go'
+      ? 'Repos...'
+      : 'Go !!!'
 
     return (
       <View style={TimerStyles.container}>
@@ -48,9 +44,8 @@ export default class TimerDisplay extends React.Component {
             size={220}
             width={32}
             fill={percent}
-            tintColor={Colors.accent.backgroundColor}
-            onAnimationComplete={() => console.log('onAnimationComplete')}
-            backgroundColor={Colors.divider.borderColor}
+            tintColor={COLORS.ACCENT}
+            backgroundColor={COLORS.SECONDARY_DARKER}
           >
             {
               () => (
@@ -62,7 +57,7 @@ export default class TimerDisplay extends React.Component {
 
         <View>
           <Text style={TimerStyles.status}>
-            {type ? `${timerStateLabel} !!` : 'En attente' }
+            {type ? timerStateLabel : 'Pause' }
           </Text>
         </View>
       </View>

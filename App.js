@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Animated, ScrollView } from 'react-native';
 import Sound from 'react-native-sound';
 
 import Counter from './counter';
-import Colors from './ui/colors';
+import { COLORS } from './ui';
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -61,7 +61,7 @@ export default class App extends React.Component {
     const backgroundStyle = backgroundAnim.interpolate({
       inputRange: [0, 1],
       // outputRange: ['#11ff11', '#000000']  // 0 : 150, 0.5 : 75, 1 : 0
-      outputRange: [Colors.primary.backgroundColor, Colors.darkPrimary.backgroundColor]
+      outputRange: [COLORS.PRIMARY, COLORS.PRIMARY_DARKER],
     });
 
     const style = Object.assign(styles, { backgroundColor: backgroundStyle }, {});

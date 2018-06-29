@@ -9,14 +9,14 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import Colors from '../../ui/colors';
+import { SCALES, FACES, COLORS } from '../../ui';
 
 const CounterControlsStyles = StyleSheet.create({
   button: {
-    backgroundColor: Colors.text.color,
+    backgroundColor: COLORS.SECONDARY,
     alignItems: 'center',
-    padding: 10,
-    margin: 16,
+    padding: SCALES._1,
+    margin: SCALES._2,
   },
 });
 
@@ -71,13 +71,6 @@ export default class CounterControls extends React.Component {
         onPress={resetChrono}
       >
         <Text>Reset Chrono</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={CounterControlsStyles.button}
-        onPress={resetConfig}
-      >
-        <Text>Reset config</Text>
       </TouchableOpacity>
     </View>
     );

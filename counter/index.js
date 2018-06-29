@@ -14,11 +14,14 @@ import CounterControls from './components/counter-controls';
 import CounterForm from './components/counter-form';
 import TimerDisplay from './components/timer-display';
 
+import { SCALES } from '../ui';
+import { DEFAULT_TIMER_CONFIG } from '../counter/constants';
+
 const CounterStyles = StyleSheet.create({
   window: {
     flex: 1,
     justifyContent: 'center',
-    marginTop: 64,
+    marginTop: SCALES._12,
   },
 });
 
@@ -28,14 +31,13 @@ export default class Counter extends React.Component {
 
     this.state = {
       timerConfig: {
-        rest: 1,
-        work: 3,
-        cycles: 0,
+        ...DEFAULT_TIMER_CONFIG,
         sound: 'default',
       },
       timerState: {
         type: '',
         time: 0,
+        cyclesLeft: 0,
         started: false,
         on: false,
       },
@@ -64,13 +66,17 @@ export default class Counter extends React.Component {
     const { timerState, timerConfig } = this.state;
 
     if (timerState.on) {
+      const nextType = timerState.type === 'work'
+        ? 'rest'
+        : 'work';
       const newTime = timerState.time - 1;
       const shouldReset = newTime === -1
         ? true
         : false;
-      const nextType = timerState.type === 'work'
-        ? 'rest'
-        : 'work';
+      const newCycles = shouldReset && nextType === 'rest'
+        ? timerState.cyclesLeft - 1
+        : timerState.cyclesLeft;
+      const shouldStop = newCycles === 0;
 
       this.setState({
         ...this.state,
@@ -78,6 +84,9 @@ export default class Counter extends React.Component {
           ...timerState,
           type: shouldReset ? nextType : timerState.type,
           time: shouldReset ? timerConfig[nextType] : newTime,
+          cyclesLeft: newCycles,
+          on: shouldStop ? false : true,
+          started: shouldStop ? false : true,
         }
       }, () => {
         if (shouldReset) {
@@ -113,6 +122,7 @@ export default class Counter extends React.Component {
         started: true,
         on: true,
         type: 'rest',
+        cyclesLeft: timerConfig.cycles,
         time: timerConfig.rest,
       }
     })
@@ -127,29 +137,10 @@ export default class Counter extends React.Component {
         ...timerState,
         started: false,
         on: false,
-        time: timerConfig.rest,
+        time: 0,
         type: '',
       },
     })
-  }
-
-  resetConfig = () => {
-    const { timerConfig } = this.state;
-
-    this.setState({
-      ...this.state,
-      timerConfig: {
-        rest: 0,
-        work: 0,
-        cycles: 0,
-        sound: 'default',
-      },
-      inputState: {
-        rest: '',
-        work: '',
-        cycles: '',
-      },
-    });
   }
 
   togglePause = () => {
@@ -168,13 +159,13 @@ export default class Counter extends React.Component {
     const { timerState, timerConfig } = this.state;
     const type = timerState.type;
 
-    if (timerState.on) {
+    if (timerState.started) {
       return Math.round(
         100 * timerState.time / Number(timerConfig[type])
       );
     }
 
-    return 0;
+    return 100;
   }
 
   render() {
@@ -202,7 +193,6 @@ export default class Counter extends React.Component {
           togglePause={this.togglePause}
           go={this.go}
           resetChrono={this.resetChrono}
-          resetConfig={this.resetConfig}
         />
       </View>
     );
