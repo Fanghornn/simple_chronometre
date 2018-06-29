@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/Users/fangornn/web/react-native-playground/android/app/build/intermediates/res/merged/debug/raw/bell.wav",
+        "source": "/Users/fangornn/web/react-native-playground/android/app/src/main/res/raw/bell.wav"
+    },
+    {
+        "merged": "/Users/fangornn/web/react-native-playground/android/app/build/intermediates/res/merged/debug/raw/bell.m4a",
+        "source": "/Users/fangornn/web/react-native-playground/android/app/src/main/res/raw/bell.m4a"
+    }
+]
