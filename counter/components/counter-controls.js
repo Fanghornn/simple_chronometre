@@ -11,14 +11,7 @@ import {
 
 import { SCALES, FACES, COLORS } from '../../ui';
 
-const CounterControlsStyles = StyleSheet.create({
-  button: {
-    backgroundColor: COLORS.SECONDARY,
-    alignItems: 'center',
-    padding: SCALES._1,
-    margin: SCALES._2,
-  },
-});
+import { MaterialButton } from '../../ui/components';
 
 export default class CounterControls extends React.Component {
   constructor(props) {
@@ -39,12 +32,11 @@ export default class CounterControls extends React.Component {
 
     if (timerStarted) {
       toggleButton = (
-        <TouchableOpacity
-          style={CounterControlsStyles.button}
+        <MaterialButton
           onPress={togglePause}
         >
           <Text>{chronoActive ? 'Pause' : 'Reprendre'}</Text>
-        </TouchableOpacity>
+        </MaterialButton>
       );
     }
 
@@ -53,25 +45,22 @@ export default class CounterControls extends React.Component {
       {
         !timerStarted
         ? (
-          <TouchableOpacity
-            style={CounterControlsStyles.button}
+          <MaterialButton
             onPress={go}
+            text={"Go}
             >
-            <Text>Go</Text>
-            </TouchableOpacity>
+          </MaterialButton>
         )
         : null  
-
       }
 
       { toggleButton }
       
-      <TouchableOpacity
-        style={CounterControlsStyles.button}
+      <MaterialButton
         onPress={resetChrono}
+        text={"Reset Chrono"}
       >
-        <Text>Reset Chrono</Text>
-      </TouchableOpacity>
+      </MaterialButton>
     </View>
     );
   }
