@@ -2,7 +2,7 @@ import * as React from 'react';
 import {
   StyleSheet,
 } from 'react-native';
-import { Container, Button, Icon, Text } from 'native-base';
+import { Container, Button, Text } from 'native-base';
 
 import { FACES, SCALES, COLORS } from '../';
 
@@ -11,13 +11,14 @@ const MaterialButtonStyles = StyleSheet.create({
 });
 
 export default function MaterialButton({
+  children,
   ...extraProps,
 }) {
   return (
     <Button
-      rounded
+      {...extraProps}
     >
-      <Text>Dernier message Sarra 23:17 (Chatellet)</Text>
+      { children }
     </Button>
   );
 }
