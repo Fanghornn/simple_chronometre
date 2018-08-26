@@ -41,6 +41,10 @@ export default class Counter extends React.Component {
         started: false,
         on: false,
       },
+      countDown: {
+        time: 5,
+        on: false,
+      },
       onTimerConfigChange: {
         work: this.createTimerChange('work'),
         rest: this.createTimerChange('rest'),
@@ -56,9 +60,60 @@ export default class Counter extends React.Component {
   componentDidMount() {
     timer.setInterval(
       'chrono',
-      this.timerTick,
+      this.initTimerTick,
       1000,
     );
+  }
+
+  initTimerTick = () => {
+    const {
+      timerState: { on: timerOn },
+      countDown: { on: countDownOn },
+    } = this.state;
+
+    if (timerOn) {
+      this.timerTick()
+    } else if (countDownOn) {
+      this.countDownTick();
+    }
+  }
+
+  countDownTick = () => {
+    const {
+      onTimerSound,
+    } = this.props;
+    const { countDown, timerState, timerConfig } = this.state;
+    const { time, on } = countDown;
+
+    const countDownFinished = time === 0
+      ? true
+      : false;
+
+    if (countDownFinished) {
+      this.setState({
+        ...this.state,
+        timerState: {
+          ...timerState,
+          started: true,
+          on: true,
+          type: 'work',
+          cyclesLeft: timerConfig.cycles,
+          time: timerConfig.work,
+        },
+        countDown: {
+          ...countDown,
+          on: false,
+        },
+      });
+    } else {
+      this.setState({
+        ...this.state,
+        countDown: {
+          ...countDown,
+          time: (time - 1),
+        }
+      });
+    };
   }
 
   timerTick = () => {
@@ -113,19 +168,16 @@ export default class Counter extends React.Component {
     }
   }
 
-  go = () => {
-    const { timerState, timerConfig } = this.state;
+  launchCountDown = () => {
+    const { countDown } = this.state;
+
     this.setState({
       ...this.state,
-      timerState: {
-        ...timerState,
-        started: true,
+      countDown: {
+        ...countDown,
         on: true,
-        type: 'rest',
-        cyclesLeft: timerConfig.cycles,
-        time: timerConfig.rest,
-      }
-    })
+      },
+    });
   }
 
   resetChrono = () => {
@@ -140,6 +192,10 @@ export default class Counter extends React.Component {
         time: 0,
         type: '',
       },
+      countDown: {
+        on: false,
+        time: 5,
+      }
     })
   }
 
@@ -156,16 +212,35 @@ export default class Counter extends React.Component {
   }
 
   getPercentageLeft() {
-    const { timerState, timerConfig } = this.state;
+    const { timerState, timerConfig, countDown } = this.state;
     const type = timerState.type;
 
     if (timerState.started) {
       return Math.round(
-        100 * timerState.time / Number(timerConfig[type])
+        100 * timerState.time / Number(timerConfig[type]),
+      );
+    }
+
+    if (countDown.on) {
+      return Math.round(
+        100 * countDown.time / 5,
       );
     }
 
     return 100;
+  }
+
+  getTimeToDisplay = () => {
+    const {
+      timerState: { time: timerTime, on: timerOn },
+      countDown: { time: countDownTime, on: countDownOn },
+    } = this.state;
+
+    if (!timerOn && !countDownOn) return '--';
+
+    if (timerOn) return timerTime;
+
+    if (countDownOn) return countDownTime;
   }
 
   render() {
@@ -174,12 +249,15 @@ export default class Counter extends React.Component {
       onTimerConfigChange,
     } = this.state;
 
+    const timeToDisplay = this.getTimeToDisplay();
+
     return (
       <View style={CounterStyles.window}>
-
         <TimerDisplay
-          time={time}
+          time={timeToDisplay}
           type={type}
+          paused={!on}
+          started={started}
           percent={this.getPercentageLeft()}
         />
 
@@ -191,7 +269,7 @@ export default class Counter extends React.Component {
           timerStarted={started}
           chronoActive={on}
           togglePause={this.togglePause}
-          go={this.go}
+          go={this.launchCountDown}
           resetChrono={this.resetChrono}
         />
       </View>

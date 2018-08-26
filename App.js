@@ -4,6 +4,11 @@ import Sound from 'react-native-sound';
 
 import Counter from './counter';
 import { COLORS } from './ui';
+
+const styles = {
+  flex: 1,
+};
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -75,7 +80,3 @@ export default class App extends React.Component {
     );
   }
 }
-
-const styles = {
-  flex: 1,
-};

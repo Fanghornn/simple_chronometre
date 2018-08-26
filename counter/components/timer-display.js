@@ -30,8 +30,33 @@ const TimerStyles = StyleSheet.create({
 });
 
 export default class TimerDisplay extends React.Component {
+
+  getTimerStatusText = () => {
+    const {
+      type,
+      time,
+      started,
+      paused,
+    } = this.props;
+
+    if (started && paused) return 'Pause';
+
+    if (started && type){
+      return type === 'rest'
+        ? 'Repos...'
+        : 'Go!!!'
+    }
+
+    return '';
+  }
+
   render() {
-    const { type, time, percent } = this.props;
+    const {
+      type,
+      time,
+      percent,
+      started,
+    } = this.props;
 
     const timerStateLabel = type === 'rest'
       ? 'Repos...'
@@ -57,7 +82,7 @@ export default class TimerDisplay extends React.Component {
 
         <View>
           <Text style={TimerStyles.status}>
-            {type ? timerStateLabel : 'Pause' }
+            { this.getTimerStatusText() }
           </Text>
         </View>
       </View>
