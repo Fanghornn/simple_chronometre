@@ -104,7 +104,7 @@ export default class Counter extends React.Component {
           ...countDown,
           on: false,
         },
-      });
+      }, onTimerSound);
     } else {
       this.setState({
         ...this.state,
